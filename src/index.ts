@@ -1,3 +1,5 @@
 import MobRulesFactory from './MobRulesFactory';
+import MobRules from './MobRules';
 
-export default MobRulesFactory;
+exports.MobRulesFactory = MobRulesFactory;
+exports.MobRules = MobRules;
