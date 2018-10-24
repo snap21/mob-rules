@@ -25,8 +25,8 @@ This is a simple example using react
 ~~~js
 import { Component } from 'react';
 import * as React from 'react';
-import { observer } from "mobx-react";
-import { MobRulesFactory } from 'mob-rules;
+import { observer } from 'mobx-react';
+import { MobRulesFactory } from 'mob-rules';
 
 @observer
 export default class SnapForm extends Component {
