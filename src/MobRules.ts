@@ -21,6 +21,9 @@ export default class MobRules {
     // any custom attribute names for display
     private attributeNames;
 
+    // any customer error messages for display
+    private errorMessages;
+
     // CSS class name for a field error
     private errorClass = 'mob-rules-error';
 
@@ -55,51 +58,6 @@ export default class MobRules {
         return this.runValidation(false);
     }
 
-    private validate(e, onlyDisplayDirty: boolean): boolean {
-        this.data[e.target.name] = e.target.value;
-        this.touched[e.target.name] = true;
-        return this.runValidation(onlyDisplayDirty);
-    }
-
-    private runValidation(onlyDisplayDirty: boolean) {
-        const validator = this.validatorFactory.make(this.data, this.rules);
-
-        if (this.attributeNames) {
-            validator.setAttributeNames(this.attributeNames);
-        }
-
-        // clear display of any errors, forcing refresh of their contents
-        this.store.errors = {};
-
-        if (validator.passes()) {
-            return true;
-        }
-
-        for (const name in this.rules) {
-            const originalValue = <string>this.original[name];
-
-            // when specified only show errors for fields that have been modified in some way
-            // for example, on page load there may be a partially filled in form where any fields
-            // with existing values should be validated, but empty fields shouldn't. Also, if
-            // an empty field is then modified, it should be validated, but not any other of the
-            // untouched fields. If the field is then cleared by deleting values, it should still
-            // show validation errors even though it's empty
-            if (!onlyDisplayDirty || originalValue || this.data[name] || this.touched[name]) {
-                this.store.errors[name] = validator.errors.first(name);
-            }
-        }
-
-        return false;
-    }
-
-    private shallowClone(obj) {
-        return  Object.assign({}, obj);
-    }
-
-    private setRules(rules) {
-        this.rules = rules;
-    }
-
     /**
      * String value of the error message for a specific field name
      *
@@ -125,7 +83,61 @@ export default class MobRules {
         return Object.keys(this.store.errors).length > 0;
     }
 
+    public setData(data): void {
+        this.data = data;
+    }
+
     public setAttributeNames(attributeNames): void {
         this.attributeNames = attributeNames;
+    }
+
+    public setErrorMessages(errorMessages): void {
+        this.errorMessages = errorMessages;
+    }
+
+    private validate(e, onlyDisplayDirty: boolean): boolean {
+        this.data[e.target.name] = e.target.value;
+        this.touched[e.target.name] = true;
+        return this.runValidation(onlyDisplayDirty);
+    }
+
+    private runValidation(onlyDisplayDirty: boolean) {
+        const validator = this.validatorFactory.make(this.data, this.rules, this.errorMessages);
+
+        if (this.attributeNames) {
+            validator.setAttributeNames(this.attributeNames);
+        }
+
+        // clear display of any errors, forcing refresh of their contents
+        this.store.errors = {};
+
+        if (validator.passes()) {
+            return true;
+        }
+
+        for (const name in this.rules) {
+            const originalValue = <string>this.original[name];
+
+            // when specified only show errors for fields that have been modified in some way
+            // for example, on page load there may be a partially filled in form where any fields
+            // with existing values should be validated, but empty fields shouldn't. Also, if
+            // an empty field is then modified, it should be validated, but not any other of the
+            // untouched fields. If the field is then cleared by deleting values, it should still
+            // show validation errors even though it's empty
+            if (!onlyDisplayDirty || originalValue || this.data[name] || this.touched[name]) {
+                this.store.errors[name] = validator.errors.first(name);
+                this.touched[name] = true;
+            }
+        }
+
+        return false;
+    }
+
+    private shallowClone(obj) {
+        return  Object.assign({}, obj);
+    }
+
+    private setRules(rules) {
+        this.rules = rules;
     }
 }

@@ -40,41 +40,6 @@ class MobRules {
         // validate the entire form
         return this.runValidation(false);
     }
-    validate(e, onlyDisplayDirty) {
-        this.data[e.target.name] = e.target.value;
-        this.touched[e.target.name] = true;
-        return this.runValidation(onlyDisplayDirty);
-    }
-    runValidation(onlyDisplayDirty) {
-        const validator = this.validatorFactory.make(this.data, this.rules);
-        if (this.attributeNames) {
-            validator.setAttributeNames(this.attributeNames);
-        }
-        // clear display of any errors, forcing refresh of their contents
-        this.store.errors = {};
-        if (validator.passes()) {
-            return true;
-        }
-        for (const name in this.rules) {
-            const originalValue = this.original[name];
-            // when specified only show errors for fields that have been modified in some way
-            // for example, on page load there may be a partially filled in form where any fields
-            // with existing values should be validated, but empty fields shouldn't. Also, if
-            // an empty field is then modified, it should be validated, but not any other of the
-            // untouched fields. If the field is then cleared by deleting values, it should still
-            // show validation errors even though it's empty
-            if (!onlyDisplayDirty || originalValue || this.data[name] || this.touched[name]) {
-                this.store.errors[name] = validator.errors.first(name);
-            }
-        }
-        return false;
-    }
-    shallowClone(obj) {
-        return Object.assign({}, obj);
-    }
-    setRules(rules) {
-        this.rules = rules;
-    }
     /**
      * String value of the error message for a specific field name
      *
@@ -97,8 +62,50 @@ class MobRules {
     hasVisibleErrors() {
         return Object.keys(this.store.errors).length > 0;
     }
+    setData(data) {
+        this.data = data;
+    }
     setAttributeNames(attributeNames) {
         this.attributeNames = attributeNames;
+    }
+    setErrorMessages(errorMessages) {
+        this.errorMessages = errorMessages;
+    }
+    validate(e, onlyDisplayDirty) {
+        this.data[e.target.name] = e.target.value;
+        this.touched[e.target.name] = true;
+        return this.runValidation(onlyDisplayDirty);
+    }
+    runValidation(onlyDisplayDirty) {
+        const validator = this.validatorFactory.make(this.data, this.rules, this.errorMessages);
+        if (this.attributeNames) {
+            validator.setAttributeNames(this.attributeNames);
+        }
+        // clear display of any errors, forcing refresh of their contents
+        this.store.errors = {};
+        if (validator.passes()) {
+            return true;
+        }
+        for (const name in this.rules) {
+            const originalValue = this.original[name];
+            // when specified only show errors for fields that have been modified in some way
+            // for example, on page load there may be a partially filled in form where any fields
+            // with existing values should be validated, but empty fields shouldn't. Also, if
+            // an empty field is then modified, it should be validated, but not any other of the
+            // untouched fields. If the field is then cleared by deleting values, it should still
+            // show validation errors even though it's empty
+            if (!onlyDisplayDirty || originalValue || this.data[name] || this.touched[name]) {
+                this.store.errors[name] = validator.errors.first(name);
+                this.touched[name] = true;
+            }
+        }
+        return false;
+    }
+    shallowClone(obj) {
+        return Object.assign({}, obj);
+    }
+    setRules(rules) {
+        this.rules = rules;
     }
 }
 __decorate([
