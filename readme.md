@@ -43,7 +43,18 @@ export default class SnapForm extends Component {
             'demo': 'required'
         };
 
-        this.validator = factory.make(original, rules);
+        // optional parameter to customize our error messages
+        const errorMessages = {
+            'demo.required' => "YOU DIDN'T ENTER :attribute"
+        };
+
+        // we can customize the attribute display names as well
+        const attributeNames = {
+            'demo': 'DEMOOOOOO'
+        };
+
+        this.validator = factory.make(original, rules, errorMessages);
+        this.validator.setAttributeNames(attributeNames);
     }
 
     render() {
