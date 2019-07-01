@@ -59,7 +59,7 @@ export default class SnapForm extends Component {
 
     render() {
         return (
-            <form onSubmit={this.validateOnSubmit} onChange={this.validator.validateOnChange}>
+            <form onSubmit={this.validator.validateOnSubmit} onChange={this.validator.validateOnChange}>
                 <div>
                     <input type="text" name="foo" />
                     <div className="error">{this.validator.getError('foo')}</div>
