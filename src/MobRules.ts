@@ -48,11 +48,17 @@ export default class MobRules {
         this.runValidation(true);
     }
 
+    /**
+     * Event handler for onChange of an HTML element
+     */
     public validateOnChange(e): boolean {
         // only update the validation for this field
         return this.validate(e, true);
     }
 
+    /**
+     * Event handler for onChange event of the form
+     */
     public validateOnSubmit(e): boolean {
         // validate the entire form
         return this.runValidation(false);
@@ -70,8 +76,16 @@ export default class MobRules {
     /**
      * Return a string modifier indicating if a field has an error
      */
-    public getErrorClass(fieldName): string {
+    public getErrorClass(fieldName: string): string {
         return this.getError(fieldName) ? this.errorClass : '';
+    }
+
+    /**
+     * CSS class returned via getErrorClass() when the given field is invalid
+     */
+    public setErrorClass(errorClass: string): this {
+        this.errorClass = errorClass;
+        return this;
     }
 
     /**
@@ -83,16 +97,44 @@ export default class MobRules {
         return Object.keys(this.store.errors).length > 0;
     }
 
-    public setData(data): void {
+    /**
+     * Data to validate
+     *
+     * @param data Basic key-value object
+     */
+    public setData(data): this {
         this.data = data;
+        return this;
     }
 
-    public setAttributeNames(attributeNames): void {
+    /**
+     * Names of elements used in validation error messages
+     *
+     * @param attributeNames e.g. { 'fieldName': 'Label to Show' }
+     */
+    public setAttributeNames(attributeNames): this {
         this.attributeNames = attributeNames;
+        return this;
     }
 
-    public setErrorMessages(errorMessages): void {
+    /**
+     * Customize message to display per field on error
+     *
+     * @param errorMessages Key-value object e.g. { 'fieldName.required': "Foo is required" }
+     */
+    public setErrorMessages(errorMessages): this {
         this.errorMessages = errorMessages;
+        return this;
+    }
+
+    /**
+     * Validation rules per field for validationjs
+     *
+     * @param rules Key-value object e.g. { 'fieldName': 'required' }
+     */
+    public setRules(rules): this {
+        this.rules = rules;
+        return this;
     }
 
     private validate(e, onlyDisplayDirty: boolean): boolean {
@@ -135,9 +177,5 @@ export default class MobRules {
 
     private shallowClone(obj) {
         return  Object.assign({}, obj);
-    }
-
-    private setRules(rules) {
-        this.rules = rules;
     }
 }
