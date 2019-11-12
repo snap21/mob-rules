@@ -6,7 +6,7 @@ mob-rules is an npm package for validation with mobx. It wraps [validatorjs](htt
 ### Installation ###
 
 ~~~sh
-npm install git+ssh://git@gitlab.lando:team/js/mob-rules.git --save
+npm install https://github.com/snap21/mob-rules.git --save
 ~~~
 
 ### Basic Usage ###
@@ -53,8 +53,9 @@ export default class SnapForm extends Component {
             'demo': 'DEMOOOOOO'
         };
 
-        this.validator = factory.make(original, rules, errorMessages);
-        this.validator.setAttributeNames(attributeNames);
+        this.validator = factory.make(original, rules);
+        this.validator.setAttributeNames(attributeNames)
+            .setErrorMessages(errorMessages);
     }
 
     render() {
