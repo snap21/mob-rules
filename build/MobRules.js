@@ -22,7 +22,7 @@ class MobRules {
         // CSS class name for a field error
         this.errorClass = 'mob-rules-error';
         this.original = original;
-        this.data = this.shallowClone(original);
+        this.resetData();
         this.rules = rules;
         this.validatorFactory = validatorFactory;
     }
@@ -32,10 +32,16 @@ class MobRules {
     validateInit() {
         this.runValidation(true);
     }
+    /**
+     * Event handler for onChange of an HTML element
+     */
     validateOnChange(e) {
         // only update the validation for this field
         return this.validate(e, true);
     }
+    /**
+     * Event handler for onChange event of the form
+     */
     validateOnSubmit(e) {
         // validate the entire form
         return this.runValidation(false);
@@ -55,6 +61,13 @@ class MobRules {
         return this.getError(fieldName) ? this.errorClass : '';
     }
     /**
+     * CSS class returned via getErrorClass() when the given field is invalid
+     */
+    setErrorClass(errorClass) {
+        this.errorClass = errorClass;
+        return this;
+    }
+    /**
      * Return true if there are any errors displayed
      *
      * This is not the same as if the form is currently valid
@@ -62,14 +75,62 @@ class MobRules {
     hasVisibleErrors() {
         return Object.keys(this.store.errors).length > 0;
     }
+    /**
+     * Data to validate
+     *
+     * @param data Basic key-value object
+     */
     setData(data) {
         this.data = data;
+        return this;
     }
+    /**
+     * Names of elements used in validation error messages
+     *
+     * @param attributeNames e.g. { 'fieldName': 'Label to Show' }
+     */
     setAttributeNames(attributeNames) {
         this.attributeNames = attributeNames;
+        return this;
     }
+    /**
+     * Customize message to display per field on error
+     *
+     * @param errorMessages Key-value object e.g. { 'fieldName.required': "Foo is required" }
+     */
     setErrorMessages(errorMessages) {
         this.errorMessages = errorMessages;
+        return this;
+    }
+    /**
+     * Validation rules per field for validationjs
+     *
+     * @param rules Key-value object e.g. { 'fieldName': 'required' }
+     */
+    setRules(rules) {
+        this.rules = rules;
+        return this;
+    }
+    /**
+     * Reset all validation
+     */
+    clear() {
+        this.clearErrors();
+        this.touched = {};
+        this.resetData();
+        return this;
+    }
+    /**
+     * Clear display of any errors, forcing refresh of their contents
+     */
+    clearErrors() {
+        this.store.errors = {};
+    }
+    /**
+     * Mirror original data
+     */
+    resetData() {
+        this.data = this.shallowClone(this.original);
     }
     validate(e, onlyDisplayDirty) {
         this.data[e.target.name] = e.target.value;
@@ -81,8 +142,7 @@ class MobRules {
         if (this.attributeNames) {
             validator.setAttributeNames(this.attributeNames);
         }
-        // clear display of any errors, forcing refresh of their contents
-        this.store.errors = {};
+        this.clearErrors();
         if (validator.passes()) {
             return true;
         }
@@ -103,9 +163,6 @@ class MobRules {
     }
     shallowClone(obj) {
         return Object.assign({}, obj);
-    }
-    setRules(rules) {
-        this.rules = rules;
     }
 }
 __decorate([
