@@ -36,7 +36,7 @@ export default class MobRules {
      */
     public constructor(original, rules, validatorFactory: ValidatorFactory) {
         this.original = original;
-        this.data = this.shallowClone(original);
+        this.resetData();
         this.rules = rules;
         this.validatorFactory = validatorFactory;
     }
@@ -137,6 +137,30 @@ export default class MobRules {
         return this;
     }
 
+    /**
+     * Reset all validation
+     */
+    public clear(): this {
+        this.clearErrors();
+        this.touched = {};
+        this.resetData();
+        return this;
+    }
+
+    /**
+     * Clear display of any errors, forcing refresh of their contents
+     */
+    private clearErrors() {
+        this.store.errors = {};
+    }
+
+    /**
+     * Mirror original data
+     */
+    private resetData() {
+        this.data = this.shallowClone(this.original);
+    }
+
     private validate(e, onlyDisplayDirty: boolean): boolean {
         this.data[e.target.name] = e.target.value;
         this.touched[e.target.name] = true;
@@ -150,8 +174,7 @@ export default class MobRules {
             validator.setAttributeNames(this.attributeNames);
         }
 
-        // clear display of any errors, forcing refresh of their contents
-        this.store.errors = {};
+        this.clearErrors();
 
         if (validator.passes()) {
             return true;
