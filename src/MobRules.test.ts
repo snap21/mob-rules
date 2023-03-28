@@ -7,7 +7,6 @@ test('length error', () => {
     const mobRules = new MobRules(original, rules, new ValidatorFactory);
     mobRules.validateInit();
 
-    // async, so wait for errors to surface
     expect(mobRules.hasVisibleErrors()).toBe(true);
     expect(mobRules.getError('name')).toBe('The name must be at least 5 characters.');
 });
@@ -18,7 +17,6 @@ test('ignore init empty fields even if required', () => {
     const mobRules = new MobRules(original, rules, new ValidatorFactory);
     mobRules.validateInit();
 
-    // async, so wait for errors to surface
     expect(mobRules.hasVisibleErrors()).toBe(false);
 });
 
@@ -30,6 +28,5 @@ test('required if touched', () => {
     mobRules.validateOnChange({ target: {name: 'name', value: 'foo'} });
     mobRules.validateOnChange({ target: {name: 'name', value: ''} });
 
-    // async, so wait for errors to surface
     expect(mobRules.hasVisibleErrors()).toBe(true);
 });
