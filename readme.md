@@ -6,7 +6,7 @@ mob-rules is an npm package for validation with mobx. It wraps `validatorjs` wit
 ### Installation ###
 
 ~~~sh
-npm install git+ssh://git@gitlab.lando:team/js/mob-rules.git --save<Paste>
+npm install git+ssh://git@gitlab.lando:team/js/mob-rules.git --save
 ~~~
 
 ### Basic Usage ###
