@@ -1,7 +1,7 @@
 Mob Rules
 ---------------
 
-mob-rules is an npm package for validation with mobx. It wraps `validatorjs` with functionality to take advantage of observers to make display of validator feedback simple and elegant.
+mob-rules is an npm package for validation with mobx. It wraps [validatorjs](https://github.com/skaterdav85/validatorjs) with functionality to take advantage of observers to make display of validator feedback simple and elegant.
 
 ### Installation ###
 
