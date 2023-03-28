@@ -19,6 +19,8 @@ class MobRules {
         };
         // any fields that have had their values change at some point
         this.touched = {};
+        // CSS class name for a field error
+        this.errorClass = 'mob-rules-error';
         this.original = original;
         this.data = this.shallowClone(original);
         this.rules = rules;
@@ -40,10 +42,10 @@ class MobRules {
     }
     validate(e, onlyDisplayDirty) {
         this.data[e.target.name] = e.target.value;
+        this.touched[e.target.name] = true;
         return this.runValidation(onlyDisplayDirty);
     }
     runValidation(onlyDisplayDirty) {
-        console.log("RUNNING VALIDATION");
         const validator = this.validatorFactory.make(this.data, this.rules);
         if (this.attributeNames) {
             validator.setAttributeNames(this.attributeNames);
@@ -63,7 +65,6 @@ class MobRules {
             // show validation errors even though it's empty
             if (!onlyDisplayDirty || originalValue || this.data[name] || this.touched[name]) {
                 this.store.errors[name] = validator.errors.first(name);
-                this.touched[name] = true;
             }
         }
         return false;
@@ -81,6 +82,12 @@ class MobRules {
      */
     getError(fieldName) {
         return typeof this.store.errors[fieldName] !== 'undefined' ? this.store.errors[fieldName] : '';
+    }
+    /**
+     * Return a string modifier indicating if a field has an error
+     */
+    getErrorClass(fieldName) {
+        return this.getError(fieldName) ? this.errorClass : '';
     }
     /**
      * Return true if there are any errors displayed
