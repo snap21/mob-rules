@@ -1,0 +1,40 @@
+{
+    "name": "mob-rules",
+    "version": "0.0.1",
+    "description": "Form validation for mobx",
+    "main": "build/index.js",
+    "types": "build/index.d.js",
+    "devDependencies": {
+        "@babel/core": "^7.1.2",
+        "@babel/plugin-proposal-class-properties": "^7.1.0",
+        "@babel/plugin-proposal-decorators": "^7.1.2",
+        "@babel/preset-env": "^7.1.0",
+        "@babel/preset-es2015": "^7.0.0-beta.53",
+        "@types/node": "^10.12.0",
+        "array-includes": "^3.0.3",
+        "babel-loader": "^8.0.4",
+        "babel-plugin-transform-require-ignore": "^0.1.1",
+        "babel-preset-mobx": "^1.0.3",
+        "indicative": "^3.0.6",
+        "mobx": "^5.5.0",
+        "reflect-metadata": "^0.1.12",
+        "serializr": "^1.3.0",
+        "ts-loader": "^5.2.2",
+        "ts-node": "^7.0.1",
+        "typescript": "^3.1.3",
+        "validatorjs": "^3.14.2",
+        "webpack": "^4.20.2",
+        "webpack-cli": "^3.1.2",
+        "webpack-dev-server": "^3.1.9",
+        "@types/jest": "^23.3.6",
+        "babel-jest": "^21.2.0",
+        "jest": "^21.2.1",
+        "jest-webpack": "^0.5.1",
+        "ts-jest": "^23.10.4",
+        "ttf-loader": "^1.0.2"
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "npx jest"
+    }
+}
